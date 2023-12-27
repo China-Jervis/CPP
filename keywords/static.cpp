@@ -6,25 +6,66 @@ static重点概念：
 3.在全局/命名空间范围（在单个文件范围内声明变量或函数时）static关键字指定变量或函数为内部链接，即外部文件无法引用该变量或函数
 4.static关键字没有赋值时，默认赋值为0
 5.static修饰局部变量时，会改变局部变量的存储位置，从而使得局部变量的生命周期变长
+6.static修饰类：
+    1.静态成员为所有类对象所共享，不属于具体的实例
+    2.静态成员变量必须在类外定义，定义时不添加static关键字
+    3.静态成员函数没有隐藏的this指针，不能访问任何非静态成员
+    4.静态成员的访问方式：1.通过对象.静态成员访问；2.类名::静态成员访问；3.匿名对象突破类域进行访问
+    5.静态成员和类的普通成员一样，也有public、protected、private3种访问级别，也可以具有返回值
 */
 
 #include<iostream>
 
 void test(){
 
-    int x=0;
+    int x=0;                      //局部变量不初始化会随机赋值，产生错误的结果
     x++;
     std::cout<<x<<" ";
 }
 
-int main(){
+//static修饰
+void test_static(){
 
+    static int x=0;              //全局变量和静态变量因为处于内存的栈区，默认初始化未0
+    x++;
+    std::cout<<x<<" ";
+}
+
+class A{
+
+private:
+    int ret=0;
+    static int _k;          //声明静态成员
+
+public:
+    //静态成员函数，没有隐藏this指针
+    static void func(){
+        // std::cout<<ret<<std::endl;       //访问出错，静态成员无法访问非静态成员
+        std::cout<<_k<<std::endl;
+    }
+};
+
+//静态变量定义
+int A::_k=0;
+
+
+int main(){
     //1.staic关键字只初始化一次，并在之后调用函数保留其状态
     //5.static修饰局部变量时，会改变局部变量的存储位置，使其生命周期变长
     for(int i=0;i<5;i++){
 
         test();
+        test_static();
+        std::cout<<std::endl;
     }
+
+    
 
     return 0;
 }
+
+
+/*
+全局变量和函数本身具有外部链接属性，可以使用extern关键字进行声明
+当使用static关键字修饰时，外部链接属性就会被修改为内部链接属性，此时全局变量就只能在其所在源文件中使用
+*/
