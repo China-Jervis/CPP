@@ -26,7 +26,7 @@ void test(){
 //static修饰
 void test_static(){
 
-    static int x=0;              //全局变量和静态变量因为处于内存的栈区，默认初始化未0
+    static int x=0;              //全局变量和静态变量因为处于内存的栈区，默认初始化为0
     x++;
     std::cout<<x<<" ";
 }
